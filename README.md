@@ -1,10 +1,15 @@
 # goembed
 goembed is Golang go:embed parse package
 
-[![Go1.16](https://github.com/visualfc/goembed/workflows/Go1.16/badge.svg)](https://github.com/visualfc/goembed/actions/workflows/go116.yml)
-[![Go1.17](https://github.com/visualfc/goembed/workflows/Go1.17/badge.svg)](https://github.com/visualfc/goembed/actions/workflows/go117.yml)
-[![Go1.18](https://github.com/visualfc/goembed/workflows/Go1.18/badge.svg)](https://github.com/visualfc/goembed/actions/workflows/go118.yml)
-[![Go1.19](https://github.com/visualfc/goembed/workflows/Go1.19/badge.svg)](https://github.com/visualfc/goembed/actions/workflows/go119.yml)
+[![Go1.16](https://github.com/msvitok77/goembed/workflows/Go1.16/badge.svg)](https://github.com/msvitok77/goembed/actions/workflows/go116.yml)
+[![Go1.17](https://github.com/msvitok77/goembed/workflows/Go1.17/badge.svg)](https://github.com/msvitok77/goembed/actions/workflows/go117.yml)
+[![Go1.18](https://github.com/msvitok77/goembed/workflows/Go1.18/badge.svg)](https://github.com/msvitok77/goembed/actions/workflows/go118.yml)
+[![Go1.19](https://github.com/msvitok77/goembed/workflows/Go1.19/badge.svg)](https://github.com/msvitok77/goembed/actions/workflows/go119.yml)
+[![Go1.20](https://github.com/msvitok77/goembed/workflows/Go1.20/badge.svg)](https://github.com/msvitok77/goembed/actions/workflows/go120.yml)
+[![Go1.21](https://github.com/msvitok77/goembed/workflows/Go1.21/badge.svg)](https://github.com/msvitok77/goembed/actions/workflows/go121.yml)
+[![Go1.22](https://github.com/msvitok77/goembed/workflows/Go1.22/badge.svg)](https://github.com/msvitok77/goembed/actions/workflows/go122.yml)
+[![Go1.23](https://github.com/msvitok77/goembed/workflows/Go1.23/badge.svg)](https://github.com/msvitok77/goembed/actions/workflows/go123.yml)
+[![Go1.24](https://github.com/msvitok77/goembed/workflows/Go1.24/badge.svg)](https://github.com/msvitok77/goembed/actions/workflows/go124.yml)
 
 
 ### demo
@@ -19,11 +24,11 @@ import (
 	"go/token"
 	"path/filepath"
 
-	"github.com/visualfc/goembed"
+	"github.com/msvitok77/goembed"
 )
 
 func main() {
-	pkg, err := build.Import("github.com/visualfc/goembed", "", 0)
+	pkg, err := build.Import("github.com/msvitok77/goembed", "", 0)
 	if err != nil {
 		panic(err)
 	}
