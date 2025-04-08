@@ -12,8 +12,8 @@ import (
 	"path/filepath"
 	"sort"
 
-	"github.com/visualfc/goembed/fs"
-	"github.com/visualfc/goembed/fsys"
+	"github.com/msvitok77/goembed/fs"
+	"github.com/msvitok77/goembed/fsys"
 )
 
 // An EmbedError indicates a problem with a go:embed directive.
@@ -94,11 +94,11 @@ func resolveEmbed(pkgdir string, patterns []string) (files []string, pmap map[st
 			// Check that directories along path do not begin a new module
 			// (do not contain a go.mod).
 			for dir := file; len(dir) > len(pkgdir)+1 && !dirOK[dir]; dir = filepath.Dir(dir) {
-				if _, err := fsys.Stat(filepath.Join(dir, "go.mod")); err == nil {
+				if _, err = fsys.Stat(filepath.Join(dir, "go.mod")); err == nil {
 					return nil, nil, fmt.Errorf("cannot embed %s %s: in different module", what, rel)
 				}
 				if dir != file {
-					if info, err := fsys.Lstat(dir); err == nil && !info.IsDir() {
+					if info, err = fsys.Lstat(dir); err == nil && !info.IsDir() {
 						return nil, nil, fmt.Errorf("cannot embed %s %s: in non-directory %s", what, rel, dir[len(pkgdir)+1:])
 					}
 				}
@@ -130,7 +130,7 @@ func resolveEmbed(pkgdir string, patterns []string) (files []string, pmap map[st
 					if err != nil {
 						return err
 					}
-					rel := filepath.ToSlash(path[len(pkgdir)+1:])
+					rel = filepath.ToSlash(path[len(pkgdir)+1:])
 					name := info.Name()
 					if path != file && (isBadEmbedName(name) || name[0] == '.' || name[0] == '_') {
 						// Ignore bad names, assuming they won't go into modules.

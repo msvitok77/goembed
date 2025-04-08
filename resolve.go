@@ -6,12 +6,12 @@ import (
 	"fmt"
 	"go/printer"
 	"go/token"
-	"io/ioutil"
+	"os"
 	"path"
 	"path/filepath"
 	"sort"
 
-	"github.com/visualfc/goembed/resolve"
+	"github.com/msvitok77/goembed/resolve"
 )
 
 // File is embed data info
@@ -76,7 +76,7 @@ func (r *resolveFile) Load(dir string, fset *token.FileSet, em *Embed) ([]*File,
 		fpath := filepath.Join(dir, v)
 		f, ok := r.data[fpath]
 		if !ok {
-			data, err := ioutil.ReadFile(fpath)
+			data, err := os.ReadFile(fpath)
 			if err != nil {
 				return nil, fmt.Errorf("%v: embed %v: %w", em.Pos, em.Patterns, err)
 			}

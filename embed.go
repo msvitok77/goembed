@@ -9,7 +9,7 @@ import (
 	"sort"
 	"strings"
 
-	embedparser "github.com/visualfc/goembed/parser"
+	embedparser "github.com/msvitok77/goembed/parser"
 )
 
 // Kind is embed var type kind

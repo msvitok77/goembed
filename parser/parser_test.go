@@ -9,11 +9,11 @@ import (
 	"reflect"
 	"testing"
 
-	embedparser "github.com/visualfc/goembed/parser"
+	embedparser "github.com/msvitok77/goembed/parser"
 )
 
 func TestParser(t *testing.T) {
-	bp, err := build.Import("github.com/visualfc/goembed", "", 0)
+	bp, err := build.Import("github.com/msvitok77/goembed", "", 0)
 	if err != nil {
 		t.Fatal(err)
 	}

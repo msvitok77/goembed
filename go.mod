@@ -1,3 +1,3 @@
-module github.com/visualfc/goembed
+module github.com/msvitok77/goembed
 
 go 1.16

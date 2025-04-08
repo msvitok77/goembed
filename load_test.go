@@ -7,9 +7,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/visualfc/goembed"
+	"github.com/msvitok77/goembed"
 
-	embedparser "github.com/visualfc/goembed/parser"
+	embedparser "github.com/msvitok77/goembed/parser"
 )
 
 func parserFile(fset *token.FileSet, src string) (*ast.File, error) {

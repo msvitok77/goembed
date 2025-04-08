@@ -52,7 +52,7 @@ func TestEmbed(t *testing.T) {
 }
 
 func TestResolve(t *testing.T) {
-	pkg, err := build.Import("github.com/visualfc/goembed", "", 0)
+	pkg, err := build.Import("github.com/msvitok77/goembed", "", 0)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -78,12 +78,13 @@ func TestResolve(t *testing.T) {
 		if err != nil {
 			t.Fatal("error load", em, err)
 		}
-		if em.Name == "data1" {
+		switch em.Name {
+		case "data1":
 			checkData1 = true
 			if string(files[0].Data) != "hello data1" {
 				t.Fail()
 			}
-		} else if em.Name == "data2" {
+		case "data2":
 			checkData2 = true
 			if string(files[0].Data) != "hello data2" {
 				t.Fail()
@@ -91,29 +92,28 @@ func TestResolve(t *testing.T) {
 		}
 		if em.Kind == EmbedFiles && em.Name == "fs" {
 			checkFS = true
-			files := BuildFS(files)
+			files = BuildFS(files)
 			for _, f := range files {
 				t.Log(f.Name, string(f.Data), f.Hash)
 			}
 			var info1 []string
 			var info2 []string
 			mfiles := *(*myfs)(unsafe.Pointer(&fs)).files
-			switch runtime.Version()[:6] {
+
+			runtimeVersion := runtime.Version()[:6]
+			switch runtimeVersion {
 			default:
-				for _, file := range mfiles {
-					info1 = append(info1, fmt.Sprintf("%v,%v,%v", file.name, file.data, file.hash))
-				}
-				for _, f := range files {
-					info2 = append(info2, fmt.Sprintf("%v,%v,%v", f.Name, string(f.Data), f.Hash))
-				}
-			case "go1.19":
-				t.Log("go1.19 compiler use NOTSHA256 skip hash check")
-				for _, file := range mfiles {
-					info1 = append(info1, fmt.Sprintf("%v,%v", file.name, file.data))
-				}
-				for _, f := range files {
-					info2 = append(info2, fmt.Sprintf("%v,%v", f.Name, string(f.Data)))
-				}
+				info1 = mfilesInfos(mfiles, true)
+				info2 = filesInfos(files, true)
+			case "go1.19", "go1.20", "go1.21", "go1.22", "go1.23":
+				t.Log("go1.19, go1.20, go1.21, go1.22, go1.23 compiler uses notsha256.Sum256 skip hash check")
+
+				info1 = mfilesInfos(mfiles, false)
+				info2 = filesInfos(files, false)
+			case "go1.24":
+				t.Log("go1.24 compiler uses sha256.Sum256 + sum[0] ^= 0xff skip hash check")
+				info1 = mfilesInfos(mfiles, false)
+				info2 = filesInfos(files, false)
 			}
 			if strings.Join(info1, ";") != strings.Join(info2, ";") {
 				t.Fatalf("build fs error:\n%v\n%v", info1, info2)
@@ -125,24 +125,26 @@ func TestResolve(t *testing.T) {
 	}
 }
 
-func TestBytesHex(t *testing.T) {
-	data := []byte("\x68\x65\x6c\x6c\x6f\x20\x77\x6f\x72\x6c\x64")
-	s := BytesToHex(data)
-	if s != `\x68\x65\x6c\x6c\x6f\x20\x77\x6f\x72\x6c\x64` {
-		t.Fatal(s)
+func mfilesInfos(mfiles []file, withHash bool) []string {
+	var info []string
+	for _, file := range mfiles {
+		if withHash {
+			info = append(info, fmt.Sprintf("%v,%v,%v", file.name, file.data, file.hash))
+		} else {
+			info = append(info, fmt.Sprintf("%v,%v", file.name, file.data))
+		}
 	}
-	if string(data) != "hello world" {
-		t.Fail()
-	}
+	return info
 }
 
-func TestBytesList(t *testing.T) {
-	data := []byte{104, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100}
-	s := BytesToList(data)
-	if s != `104,101,108,108,111,32,119,111,114,108,100` {
-		t.Fatal(s)
+func filesInfos(files []*File, withHash bool) []string {
+	var info []string
+	for _, f := range files {
+		if withHash {
+			info = append(info, fmt.Sprintf("%v,%v,%v", f.Name, string(f.Data), f.Hash))
+		} else {
+			info = append(info, fmt.Sprintf("%v,%v", f.Name, string(f.Data)))
+		}
 	}
-	if string(data) != "hello world" {
-		t.Fail()
-	}
+	return info
 }

@@ -18,7 +18,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/visualfc/goembed/fs"
+	"github.com/msvitok77/goembed/fs"
 )
 
 // OverlayFile is the path to a text file in the OverlayJSON format.
@@ -91,14 +91,14 @@ func Init(wd string) error {
 		return nil
 	}
 
-	b, err := ioutil.ReadFile(OverlayFile)
+	b, err := os.ReadFile(OverlayFile)
 	if err != nil {
-		return fmt.Errorf("reading overlay file: %v", err)
+		return fmt.Errorf("reading overlay file: %w", err)
 	}
 
 	var overlayJSON OverlayJSON
 	if err := json.Unmarshal(b, &overlayJSON); err != nil {
-		return fmt.Errorf("parsing overlay JSON: %v", err)
+		return fmt.Errorf("parsing overlay JSON: %w", err)
 	}
 
 	return initFromJSON(overlayJSON)
@@ -534,7 +534,7 @@ func (f fakeDir) Sys() interface{}   { return nil }
 // Glob is like filepath.Glob but uses the overlay file system.
 func Glob(pattern string) (matches []string, err error) {
 	// Check pattern is well-formed.
-	if _, err := filepath.Match(pattern, ""); err != nil {
+	if _, err = filepath.Match(pattern, ""); err != nil {
 		return nil, err
 	}
 	if !hasMeta(pattern) {
