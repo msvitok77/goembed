@@ -67,6 +67,14 @@ func parseFile(fset *token.FileSet, file *ast.File) ([]fileEmbed, error) {
 	return embeds, nil
 }
 
+// cut is similar to strings.Cut, but strings.Cut was added in 1.18 and we should support 1.16 onwards
+func cut(s, sep string) (before, after string, found bool) {
+	if i := strings.Index(s, sep); i >= 0 {
+		return s[:i], s[i+len(sep):], true
+	}
+	return s, "", false
+}
+
 // parseGoEmbed parses the text following "//go:embed" to extract the glob patterns.
 // It accepts unquoted space-separated patterns as well as double-quoted and back-quoted Go strings.
 // This is based on a similar function in cmd/compile/internal/gc/noder.go;
@@ -101,7 +109,7 @@ func parseGoEmbed(args string, pos token.Position) ([]fileEmbed, error) {
 
 		case '`':
 			var ok bool
-			path, _, ok = strings.Cut(args[1:], "`")
+			path, _, ok = cut(args[1:], "`")
 			if !ok {
 				return nil, fmt.Errorf("invalid quoted string in //go:embed: %s", args)
 			}
